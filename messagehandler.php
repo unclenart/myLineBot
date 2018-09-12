@@ -1,8 +1,12 @@
 <?php
 require_once('./LINEBotTiny.php');
 require('messagestoreapi.php');
+<<<<<<< HEAD
 include('secret.php');  // store token and secret
 
+=======
+include('secret.php');  // token and secret key from LINE
+>>>>>>> 56303a8fba7d31b6da96d75dcb471986e948381d
 
 $ShowID = 1;
 
