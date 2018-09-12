@@ -1,7 +1,8 @@
 <?php
 require_once('./LINEBotTiny.php');
 require('messagestoreapi.php');
-include('secret.php');
+include('secret.php');  // store token and secret
+
 
 $ShowID = 1;
 
@@ -264,7 +265,30 @@ if($message['text'] == "สวัสดี"){
         )
     ));
   }
-
+// end hello
+/*
+    # Message Type "Location"
+    else if($message == "พิกัดสื่อสาร"){
+		// 13.7855898,100.5324428     13.7905625  100.5257741
+        $arrayPostData['replyToken'] = $arrayJson['events'][0]['replyToken'];
+        $arrayPostData['messages'][0]['type'] = "location";
+        $arrayPostData['messages'][0]['title'] = "ศูนย์โทรคมนาคม กรมการทหารสื่อสาร";
+        $arrayPostData['messages'][0]['address'] =   "13.7905625,100.5257741";
+        $arrayPostData['messages'][0]['latitude'] = "13.7905625";
+        $arrayPostData['messages'][0]['longitude'] = "100.5257741";
+        replyMsg($arrayHeader,$arrayPostData);
+    }
+    #  Message Type "Text + Sticker ใน 1 ครั้ง"
+    else if($message == "ลาก่อน"){
+        $arrayPostData['replyToken'] = $arrayJson['events'][0]['replyToken'];
+        $arrayPostData['messages'][0]['type'] = "text";
+        $arrayPostData['messages'][0]['text'] = "ได้โปรด อย่าทิ้งกันไป";
+        $arrayPostData['messages'][1]['type'] = "sticker";
+        $arrayPostData['messages'][1]['packageId'] = "1";
+        $arrayPostData['messages'][1]['stickerId'] = "131";
+        replyMsg($arrayHeader,$arrayPostData);
+    }
+*/
 // start image  
 if($message['text'] == "รูปน้องแมว"){
     $image_url = "https://i.pinimg.com/originals/cc/22/d1/cc22d10d9096e70fe3dbe3be2630182b.jpg";
@@ -384,7 +408,7 @@ $b3 = $bitarray[1]['change'];
                     */
 
                     break;
-                case 'image':
+                    case 'image':
                     $fp = fopen ('images/'.$message['id'].'.jpg', 'w+');
                     $out = contactline("https://api.line.me/v2/bot/message/". $message['id'] ."/content");
                     fwrite($fp, $out);
@@ -407,11 +431,27 @@ $b3 = $bitarray[1]['change'];
 
                     writemsg($source['userId'], "image ".$message['id']." saved at ".'images/'.$message['id'].'.jpg' , $outarray['displayName'], 'profiles/'.$source['userId'].'.jpg', $groupid);
                 break;
+                case 'beacon':  // start beacon
+                $beax='aaa';
+
+                $client->replyMessage(array(
+                    'replyToken' => $event['replyToken'],
+                    'messages' => array(
+                        array(
+                            'type' => 'beacon',
+                            'beacon' => $event[0][0]
+                        )
+                    )
+                ));
+
+                break;      // end beacon
+
                 default:
                     error_log("Unsupporeted message type: " . $message['type']);
                     break;
             }
             break;
+
         default:
             error_log("Unsupporeted event type: " . $event['type']);
             break;
